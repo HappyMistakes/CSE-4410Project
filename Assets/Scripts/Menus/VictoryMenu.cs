@@ -20,8 +20,8 @@ public class VictoryMenu : MonoBehaviour {
 
     public void NextLevel() {
         Time.timeScale = 1f; // Resume game
-        Debug.Log("Next Level Placeholder! No next level set.");
-        // SceneManager.LoadScene("NextLevel"); // Uncomment when you have a next level
+        //Debug.Log("Next Level Placeholder! No next level set.");
+        SceneManager.LoadScene("Level2"); // Uncomment when i have a next level
     }
 
     public void QuitGame() {

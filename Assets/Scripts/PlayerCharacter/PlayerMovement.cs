@@ -13,36 +13,41 @@ public class PlayerMovement : MonoBehaviour {
     public LayerMask groundLayer;
 
     private bool isGrounded;
-    private SpriteRenderer spriteRenderer; // Reference to sprite
+    private SpriteRenderer spriteRenderer; 
+    private Animator animator;
 
     void Start() {
-        body.gravityScale = gravityScale; // Apply gravity scale
+        body.gravityScale = gravityScale;
         jumpForce = Mathf.Sqrt(2 * Mathf.Abs(Physics2D.gravity.y) * gravityScale * 2.2f);
 
-        Debug.Log("Calculated Jump Force: " + jumpForce);
-
         spriteRenderer = GetComponent<SpriteRenderer>();
-
-
+        animator = GetComponent<Animator>(); 
     }
 
-    // Update is called once per frame
-    void Update() {
-        //Getting the inputs from unity
-        float xInput = Input.GetAxis("Horizontal");
-        body.velocity = new Vector2(xInput * speed, body.velocity.y);
+void Update() {
 
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.1f, groundLayer);
+    float xInput = Input.GetAxis("Horizontal");
+    body.velocity = new Vector2(xInput * speed, body.velocity.y);
 
-        if (Input.GetButtonDown("Jump") && isGrounded) {
-            body.velocity = new Vector2(body.velocity.x, jumpForce);
-        }
+    isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.1f, groundLayer);
 
-        if (xInput > 0) {
-            spriteRenderer.flipX = true; // Face right
-        } 
-        else if (xInput < 0) {
-            spriteRenderer.flipX = false; // Face left
-        }
+    if (Input.GetButtonDown("Jump") && isGrounded) {
+        body.velocity = new Vector2(body.velocity.x, jumpForce);
     }
+
+    if (xInput > 0) {
+        spriteRenderer.flipX = false;
+    } 
+    else if (xInput < 0) {
+        spriteRenderer.flipX = true;
+    }
+
+    animator.SetBool("isMoving", Mathf.Abs(xInput) > 0.01f);
+
+    
+    if (Input.GetMouseButtonDown(0)) { // 0 = Left Mouse Button
+        animator.SetTrigger("Attack");
+    }
+
+}
 }
